@@ -34,7 +34,8 @@ def main():
     # of specific dimension.
     width = 1920
     height = 1080
-    window = pygame.display.set_mode((1920, 1080))
+    window = pygame.display.set_mode((width, height))
+
     # Create a cell size to divide the display into a grid.
     cell_width = 30
     cell_height = 30
@@ -42,8 +43,10 @@ def main():
     # Fill the scree with a grey background color
     window.fill((128, 128, 128))
 
-    # Draws the surface object to the screen.
+    # Draw the grey background and grid.
     draw_grid(window, cell_width, cell_height)
+
+    # Run main game logic.
     main_game(window, cell_width, cell_height)
 
 
