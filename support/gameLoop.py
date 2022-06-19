@@ -48,11 +48,15 @@ def to_alive(window, array, mouse_position, cell_width, cell_height):
     x_position = mouse_position[0] - (mouse_position[0] % cell_width)
     y_position = mouse_position[1] - (mouse_position[1] % cell_height)
 
+    # Fill the cell with the color representing an alive state.
     pygame.draw.rect(window, alive_cell_color, (x_position + 1, y_position + 1, cell_width - 1, cell_height -1))
 
+    # Get the row and column of the cell by dividing the x-position and y-position of the cell
+    # by the width and height of a single cell. Cast to an integer for indexing.
     col = int(x_position / cell_width)
     row = int(y_position / cell_height)
 
+    # Set the cell value in the array to True for alive.
     array[row][col] = True
 
 
@@ -75,9 +79,12 @@ def to_dead(window, array, mouse_position, cell_width, cell_height):
 
     pygame.draw.rect(window, dead_cell_color, (x_position + 1, y_position + 1, cell_width - 1, cell_height - 1))
 
+    # Get the row and column of the cell by dividing the x-position and y-position of the cell
+    # by the width and height of a single cell. Cast to an integer for indexing.
     col = int(x_position / cell_width)
     row = int(y_position / cell_height)
 
+    # Set the cell value in the array to False for dead.
     array[row][col] = False
 
 
@@ -93,10 +100,13 @@ def array_init(cell_width, cell_height):
     w, h = pygame.display.get_surface().get_size()
     
     # Get the total rows and columns of the array by dividing the width and height of the game display
-    # by the width and height of a single cell.
+    # by the width and height of a single cell. Cast to an integer for indexing.
     cols = int(w/cell_width)
     rows = int(h/cell_height)
+
+    # Create an array of size rows x cols and fill it with the value 'False'
     array = [[False for i in range(cols)] for j in range(rows)]
+
     return array
 
 
@@ -110,12 +120,17 @@ def game_logic(window, array, cell_width, cell_height):
 
     :return: Void. Reverse cell values in the array object where needed.
     """
+    # Initialize empty array to hold the coordinates of cells whose value needs to be inverted.
     inverse_indices = []
+
+    # Loop through the entire array, going row by row. Check whether each cell's state should remain the same
+    # or be inverted. If a cell's state should be inverted, store the index of that cell in the initialized array.
     for i in range(0, len(array) - 1):
         for j in range(0, len(array[0]) - 1):
             if cell_die_or_live(get_live_neighbors(array, i, j), i, j, array[i][j]):
                 inverse_indices.append(cell_die_or_live(get_live_neighbors(array, i, j), i, j, array[i][j]))
 
+    # Loop through the array of cell indices and invert the value of each cell.
     for cell in inverse_indices:
         inverse_cell_state(cell, window, array, cell_width, cell_height)
 
@@ -131,7 +146,11 @@ def get_live_neighbors(array, row, col):
 
     :return: array: The initialized array.
     """
+    # Initialize a count variable to count the number of alive neighbors found.
     count = 0
+
+    # Loop through the surrounding cells (above, below, to the left and to the right) and check whether each cell is
+    # alive or not. If a neighbor cell is alive, increment count.
     for i in range(row - 1, row + 2):
         for j in range(col - 1, col + 2):
             if (i != row) or (j != col):
@@ -152,6 +171,8 @@ def cell_die_or_live(live_neighbors, row, column, state):
     :return: cell index if cell will die or be revived.
     :return: False if cell is to reman the same.
     """
+    # Check whether a cell should be inverted. If a cell's properties falls within any of the rules and needs to be
+    # inverted, return the cell's index along with it's current state.
     if live_neighbors < 2 and state:
         return [row, column, state]
     elif live_neighbors > 3 and state:
@@ -172,8 +193,12 @@ def inverse_cell_state(cell, window, array, cell_width, cell_height):
     :param: cell_height: The height of a single cell (cell).
 
 
-    :return: Void. Draw the reversed state of the cell and update the Array reference to reverse cell state at the given position.
-        """
+    :return: Void. Draw the reversed state of the cell and update the Array
+    reference to reverse cell state at the given position.
+    """
+    # Check the state of a cell. If it is True, invert it and fill in the corresponding cell on the display with
+    # the dead color. If it is False, invert it and fill in the corresponding cell on the display
+    # with the alive color.
     if cell[2]:
         color = (128, 128, 128)
         array[cell[0]][cell[1]] = not cell[2]
@@ -181,6 +206,7 @@ def inverse_cell_state(cell, window, array, cell_width, cell_height):
         color = (255, 255, 0)
         array[cell[0]][cell[1]] = not cell[2]
 
+    # Fill in the cell on the display.
     pygame.draw.rect(window, color, (cell[1] * cell_width + 1, cell[0] * cell_height + 1, cell_width - 1,
                                                 cell_height - 1))
 
@@ -194,7 +220,10 @@ def run_game(window, array, cell_width, cell_height):
     :param: cell_height: The height of a single cell (cell).
 
     :return: Void. Run the game logic."""
+    # Run game logic
     game_logic(window, array, cell_width, cell_height)
+
+    # Sleep for 0.1 seconds to slow down the animation.
     time.sleep(0.1)
 
 
