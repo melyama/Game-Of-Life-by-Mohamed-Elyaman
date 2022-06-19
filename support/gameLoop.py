@@ -120,7 +120,8 @@ def game_logic(window, array, block_width, block_height):
 def get_live_neighbors(array, row, col):
     """Get the number of 'alive' neighbors of a cell.
 
-    A neighbor is any cell that is adjacent tpq
+    A neighbor is any cell that is directly adjacent to the cell in question. Diagonals included.
+    All cells have 9 neighbors.
 
     :param: block_width: The width of a single block (cell).
     :param: block_height: The height of a single block (cell).
