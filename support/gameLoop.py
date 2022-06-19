@@ -14,7 +14,7 @@ def main_game(window, cell_width, cell_height):
             if event.type == pygame.QUIT:
                 sys.exit()
 
-            user_select_cells(event, window, array, cell_width, cell_height)
+            user_select_cells(window, array, cell_width, cell_height)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -227,10 +227,9 @@ def run_game(window, array, cell_width, cell_height):
     time.sleep(0.1)
 
 
-def user_select_cells(event, window, array, cell_width, cell_height):
+def user_select_cells(window, array, cell_width, cell_height):
 
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        if event.button == 1:
-            to_alive(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
-        elif event.button == 3:
-            to_dead(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
+    if pygame.mouse.get_pressed()[0]:
+        to_alive(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
+    elif pygame.mouse.get_pressed()[2]:
+        to_dead(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
