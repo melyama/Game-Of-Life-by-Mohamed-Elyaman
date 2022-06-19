@@ -15,14 +15,8 @@ def main_game(window, cell_width, cell_height):
                 sys.exit()
 
             user_select_cells(window, array, cell_width, cell_height)
+            run, space_count = check_space(event, space_count)
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    space_count += 1
-                    if space_count % 2 != 0:
-                        run = True
-                    else:
-                        run = False
 
         if run:
             run_game(window, array, cell_width, cell_height)
@@ -228,8 +222,39 @@ def run_game(window, array, cell_width, cell_height):
 
 
 def user_select_cells(window, array, cell_width, cell_height):
+    """Allow user to select and deselect cells.
 
+    :param: window: The pygame window object that display's the game.
+    :param: array: The boolean array that stores the state of each cell.
+    :param: cell_width: The width of a single cell (cell).
+    :param: cell_height: The height of a single cell (cell).
+
+    :return: Void."""
+    # Check if mouse is pressed. If the left click is pressed (0), set the state of the cell under the mouse's position
+    # to alive. If the right click is pressed (2), set the state of the cell under the mouses position to dead.
     if pygame.mouse.get_pressed()[0]:
         to_alive(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
     elif pygame.mouse.get_pressed()[2]:
         to_dead(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
+
+
+def check_space(event, space_count):
+    """Check user input for space bar.
+
+    If space bar is pressed once, play the game. Twice, pause the game. Alternate to allow user to play/pause game as
+    needed.
+
+    :param: event: The event object that keeps track of user inputs.
+    :param: space_count: A variable keeping track of the number of times space has been pressed.
+
+    :return: Void."""
+    # Check if a key has been pressed. If he pressed key is space bar, check whether the occurrence is odd or even.
+    # If the occurrence is odd, return True and the value of space_count. If the occurrence is odd, return False and
+    # the value of space_count.
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_SPACE:
+            space_count += 1
+            if space_count % 2 != 0:
+                return True, space_count
+            else:
+                return False, space_count
