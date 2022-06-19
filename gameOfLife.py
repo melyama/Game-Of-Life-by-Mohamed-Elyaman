@@ -1,6 +1,6 @@
 import pygame
-from drawGrid import draw_grid
-from gameLoop import main_game
+from support.drawGrid import draw_grid
+from support.gameLoop import main_game
 
 
 def main():
