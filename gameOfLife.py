@@ -4,7 +4,7 @@ from support.gameLoop import main_game
 
 
 def main():
-    """Main game function, run this file to play the game. This code was written by Mohamed Elyaman.
+    """Main game function, r:::un this file to play the game. This code was written by Mohamed Elyaman.
 
     This is a personal copy of the game of life created by  the English Mathematician John Conway.
     The game operates by the following simple rules:
@@ -21,6 +21,9 @@ def main():
     If you desire to pause/stop the game logic, simply press space bar a second time. If you would like to restart, either
     deselect the cells you want to remove using right click or exit the game by clicking the exit button on the top
     right hand corner of the window and re-run this program.
+
+    To run this program you will need to have a python interpreter installed as well as the pygame package. See online
+    documentation for help installing these.
 
     """
     # initiate pygame and give permission
