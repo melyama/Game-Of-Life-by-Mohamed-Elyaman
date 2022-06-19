@@ -32,16 +32,16 @@ def main():
     width = 1920
     height = 1080
     window = pygame.display.set_mode((1920, 1080))
-    # Create a block size to divide the display into a grid.
-    block_width = 30
-    block_height = 30
+    # Create a cell size to divide the display into a grid.
+    cell_width = 30
+    cell_height = 30
 
     # Fill the scree with a grey background color
     window.fill((128, 128, 128))
 
     # Draws the surface object to the screen.
-    draw_grid(window, block_width, block_height)
-    main_game(window, block_width, block_height)
+    draw_grid(window, cell_width, cell_height)
+    main_game(window, cell_width, cell_height)
 
 
 if __name__ == '__main__':
