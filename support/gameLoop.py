@@ -15,9 +15,7 @@ def main_game(window, cell_width, cell_height):
                 sys.exit()
 
             user_select_cells(window, array, cell_width, cell_height)
-            run, space_count = check_space(event, space_count)
-
-
+            run, space_count = check_space(event, space_count, run)
         if run:
             run_game(window, array, cell_width, cell_height)
 
@@ -238,7 +236,7 @@ def user_select_cells(window, array, cell_width, cell_height):
         to_dead(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
 
 
-def check_space(event, space_count):
+def check_space(event, space_count, run):
     """Check user input for space bar.
 
     If space bar is pressed once, play the game. Twice, pause the game. Alternate to allow user to play/pause game as
@@ -258,3 +256,5 @@ def check_space(event, space_count):
                 return True, space_count
             else:
                 return False, space_count
+
+    return run, space_count
