@@ -1,24 +1,48 @@
+"""Main game loop module. Holds all of the game loop functions."""
+
 import pygame
 import sys
 import time
 
 
 def main_game(window, cell_width, cell_height):
+    """Run the game loop.
 
+   :param: window: The pygame window object that display's the game.
+   :param: cell_width: The width of a single cell (cell).
+   :param: cell_height: The height of a single cell (cell).
+
+   :return: Void.
+   """
     # Initialize a 2D array with False to represent initial state of all cells
     array = array_init(cell_width, cell_height)
+
+    # Initialize a run variable to run game logic when user presses space.
     run = False
+
+    # Initialize a space count variable to count the number of times a user presses space. Even numbers pause the
+    # game, odd numbers resume.
     space_count = 0
+
+    # Main game while loop.
     while True:
+        # Loop through all events (user inputs)
         for event in pygame.event.get():
+            # If the user presses the quit button, exit the process.
             if event.type == pygame.QUIT:
                 sys.exit()
 
+            # Allow user to select cells to be dead or alive.
             user_select_cells(window, array, cell_width, cell_height)
+
+            # Check space count here and resume/pause game accordingly.
             run, space_count = check_space(event, space_count, run)
+
+        # Check run variable. If true, run game logic.
         if run:
             run_game(window, array, cell_width, cell_height)
 
+        # Update game display with new drawing.
         pygame.display.update()
 
 
@@ -29,7 +53,7 @@ def to_alive(window, array, mouse_position, cell_width, cell_height):
     :param: array: The boolean array that stores the state of each cell.
     :param: cell_width: The width of a single cell (cell).
     :param: cell_height: The height of a single cell (cell).
-    :param: mouse_position: The position of the user's mouse when a click has occurred (if it has occurred).
+    :param: mouse_position: The position of the user's mouse where a click has occurred.
 
     :return: Void. No return, set the corresponding array value to True and color the respective cell yellow.
     """

@@ -1,3 +1,5 @@
+"""Main game file."""
+
 import pygame
 from support.drawGrid import draw_grid
 from support.gameLoop import main_game
