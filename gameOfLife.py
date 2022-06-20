@@ -1,4 +1,4 @@
-"""Main game file."""
+"""Main game file. See support folder for supporting files."""
 
 import pygame
 from support.drawGrid import draw_grid
