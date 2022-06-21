@@ -39,8 +39,8 @@ def main():
     window = pygame.display.set_mode((width, height))
 
     # Create a cell size to divide the display into a grid.
-    cell_width = 30
-    cell_height = 30
+    cell_width = 15
+    cell_height = 15
 
     # Fill the scree with a grey background color
     window.fill((128, 128, 128))

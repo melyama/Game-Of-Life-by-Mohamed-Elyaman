@@ -33,9 +33,12 @@ def main_game(window, cell_width, cell_height):
             if event.type == pygame.QUIT:
                 sys.exit()
 
-            # Allow user to select cells to be dead or alive.
+            # Allow user to select cells to be dead or alive if and only if the game is paused.
             if not run:
                 user_select_cells(window, array, cell_width, cell_height)
+
+            # Allow the user to scroll to adjust size od the grid.
+            user_scroll(window, event, cell_width, cell_height)
 
             # Check space count here and resume/pause game accordingly.
             run, space_count = check_space(event, space_count, run)
@@ -257,7 +260,6 @@ def user_select_cells(window, array, cell_width, cell_height):
     # Check if mouse is pressed. If the left click is pressed (0), set the state of the cell under the mouse's position
     # to alive. If the right click is pressed (2), set the state of the cell under the mouses position to dead.
     if pygame.mouse.get_pressed()[0]:
-        print("Pressed")
         to_alive(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
     elif pygame.mouse.get_pressed()[2]:
         to_dead(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
@@ -285,3 +287,44 @@ def check_space(event, space_count, run):
                 return False, space_count
 
     return run, space_count
+
+
+def user_scroll(window, event, cell_width, cell_height):
+    """Adjust the size of cells and redraw the new size if the user uses the mouse scroll.
+
+    If the user scrolls in, increase the size of each cell on the display screen. If the user scrolls out, decrease the
+    size of each cell on the display screen.
+
+    :param: event: The event object that keeps track of user inputs.
+    :param: space_count: A variable keeping track of the number of times space has been pressed.
+
+    :return: Void."""
+    # Check if the current event involved a mouse button.
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        # Check if the event that occurred is a mouse scroll in.
+        if event.button == 4:
+
+            # Reduce cell width and height by 2 pixels.
+            cell_width += 2
+            cell_height += 2
+
+            # Refill the window with the background color before drawing new grid.
+            window.fill((128, 128, 128))
+
+            # Draw new grid and update the display.
+            draw_grid(window, cell_width, cell_height)
+            pygame.display.update()
+
+        # Check if the event that occurred is a mouse scroll out.
+        elif event.button == 5:
+
+            # Increase cell width and height by 2 pixels.
+            cell_width -= 2
+            cell_height -= 2
+
+            # Refill the window with the background color before drawing new grid.
+            window.fill((128, 128, 128))
+
+            # Draw new grid and update the display.
+            draw_grid(window, cell_width, cell_height)
+            pygame.display.update()
