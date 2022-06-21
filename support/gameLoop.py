@@ -38,7 +38,7 @@ def main_game(window, cell_width, cell_height):
                 user_select_cells(window, array, cell_width, cell_height)
 
             # Allow the user to scroll to adjust size od the grid.
-            user_scroll(window, event, cell_width, cell_height)
+            cell_width, cell_height = user_scroll(window, event, cell_width, cell_height)
 
             # Check space count here and resume/pause game accordingly.
             run, space_count = check_space(event, space_count, run)
@@ -286,6 +286,7 @@ def check_space(event, space_count, run):
             else:
                 return False, space_count
 
+    # If nothing has changed, return original run and space values.
     return run, space_count
 
 
@@ -301,30 +302,34 @@ def user_scroll(window, event, cell_width, cell_height):
     :return: Void."""
     # Check if the current event involved a mouse button.
     if event.type == pygame.MOUSEBUTTONDOWN:
-        # Check if the event that occurred is a mouse scroll in.
+        # Check if the event that occurred is a mouse scroll in. If so, increase cell size to zoom in.
         if event.button == 4:
-
             # Reduce cell width and height by 2 pixels.
             cell_width += 2
             cell_height += 2
 
             # Refill the window with the background color before drawing new grid.
+            # If so, increase cell size to zoom out.
             window.fill((128, 128, 128))
-
             # Draw new grid and update the display.
             draw_grid(window, cell_width, cell_height)
             pygame.display.update()
 
+            return cell_width, cell_height
+
         # Check if the event that occurred is a mouse scroll out.
         elif event.button == 5:
-
             # Increase cell width and height by 2 pixels.
             cell_width -= 2
             cell_height -= 2
 
             # Refill the window with the background color before drawing new grid.
             window.fill((128, 128, 128))
-
             # Draw new grid and update the display.
             draw_grid(window, cell_width, cell_height)
             pygame.display.update()
+
+            return cell_width, cell_height
+
+    # If nothing has changed, return original cell width and height.
+    return cell_width, cell_height
