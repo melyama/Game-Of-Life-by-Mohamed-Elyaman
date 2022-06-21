@@ -36,6 +36,7 @@ def main_game(window, cell_width, cell_height):
             # Allow user to select cells to be dead or alive if and only if the game is paused.
             if not run:
                 user_select_cells(window, array, cell_width, cell_height)
+                user_increment_generation(event, window, array, cell_width, cell_height)
 
             # Allow the user to scroll to adjust size od the grid.
             cell_width, cell_height = user_scroll(window, array, event, cell_width, cell_height)
@@ -46,6 +47,7 @@ def main_game(window, cell_width, cell_height):
         # Check run variable. If true, run game logic.
         if run:
             run_game(window, array, cell_width, cell_height)
+
 
         # Update game display with new drawing.
         pygame.display.update()
@@ -311,7 +313,7 @@ def user_scroll(window, array, event, cell_width, cell_height):
     if event.type == pygame.MOUSEBUTTONDOWN:
         # Check if the event that occurred is a mouse scroll in. If so, increase cell size to zoom in.
         if event.button == 4:
-            # Reduce cell width and height by 2 pixels.
+            # Increase cell width and height by 2 pixels.
             cell_width += 2
             cell_height += 2
 
@@ -327,7 +329,7 @@ def user_scroll(window, array, event, cell_width, cell_height):
 
         # Check if the event that occurred is a mouse scroll out.
         elif event.button == 5:
-            # Increase cell width and height by 2 pixels.
+            # Reduce cell width and height by 2 pixels.
             cell_width -= 2
             cell_height -= 2
 
@@ -361,3 +363,20 @@ def draw_array_state(window, array, cell_width, cell_height):
             if array[i][j]:
                 to_alive(window, array, cell_width, cell_height, cell_x_position=j, cell_y_position=i)
     return
+
+
+def user_increment_generation(event, window, array, cell_width, cell_height):
+    """Allow user to increment by one generation if left key button is clicked during pause mode.
+
+    Check if left key is down. If true, increment the game by one generation.
+
+    :param: event: The event object that keeps track of user inputs.
+    :param: window: The pygame window object that display's the game.
+    :param: array: The boolean array that stores the state of each cell.
+    :param: cell_width: The width of a single cell (cell).
+    :param: cell_height: The height of a single cell (cell).
+
+    :return: Void."""
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_RIGHT:
+            run_game(window, array, cell_width, cell_height)
