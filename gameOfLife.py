@@ -6,7 +6,7 @@ from support.gameLoop import main_game
 
 
 def main():
-    """Main game function, r:::un this file to play the game. This code was written by Mohamed Elyaman.
+    """Main game function, run this file to play the game. This code was written by Mohamed Elyaman.
 
     This is a personal copy of the game of life created by  the English Mathematician John Conway.
     The game operates by the following simple rules:
