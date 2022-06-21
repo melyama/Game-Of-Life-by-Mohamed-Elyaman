@@ -3,6 +3,7 @@
 import pygame
 import sys
 import time
+from .drawGrid import draw_grid
 
 
 def main_game(window, cell_width, cell_height):
@@ -33,7 +34,8 @@ def main_game(window, cell_width, cell_height):
                 sys.exit()
 
             # Allow user to select cells to be dead or alive.
-            user_select_cells(window, array, cell_width, cell_height)
+            if not run:
+                user_select_cells(window, array, cell_width, cell_height)
 
             # Check space count here and resume/pause game accordingly.
             run, space_count = check_space(event, space_count, run)
@@ -255,6 +257,7 @@ def user_select_cells(window, array, cell_width, cell_height):
     # Check if mouse is pressed. If the left click is pressed (0), set the state of the cell under the mouse's position
     # to alive. If the right click is pressed (2), set the state of the cell under the mouses position to dead.
     if pygame.mouse.get_pressed()[0]:
+        print("Pressed")
         to_alive(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
     elif pygame.mouse.get_pressed()[2]:
         to_dead(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
