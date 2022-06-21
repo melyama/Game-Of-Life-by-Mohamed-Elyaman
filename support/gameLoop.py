@@ -40,7 +40,7 @@ def main_game(window, cell_width, cell_height):
 
 
 def check_events(window, array, cell_width, cell_height, run, space_count):
-    """Switch a cell state from dead to alive.
+    """Check all game events (user inputs) and handle them as needed.
 
     :param: window: The pygame window object that display's the game.
     :param: array: The boolean array that stores the state of each cell.
