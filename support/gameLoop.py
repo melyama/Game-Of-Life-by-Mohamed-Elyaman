@@ -38,7 +38,7 @@ def main_game(window, cell_width, cell_height):
                 user_select_cells(window, array, cell_width, cell_height)
 
             # Allow the user to scroll to adjust size od the grid.
-            cell_width, cell_height = user_scroll(window, event, cell_width, cell_height)
+            cell_width, cell_height = user_scroll(window, array, event, cell_width, cell_height)
 
             # Check space count here and resume/pause game accordingly.
             run, space_count = check_space(event, space_count, run)
@@ -51,7 +51,7 @@ def main_game(window, cell_width, cell_height):
         pygame.display.update()
 
 
-def to_alive(window, array, mouse_position, cell_width, cell_height):
+def to_alive(window, array, cell_width, cell_height,  mouse_position=None, cell_x_position=None, cell_y_position=None):
     """Switch a cell state from dead to alive.
 
     :param: window: The pygame window object that display's the game.
@@ -64,6 +64,13 @@ def to_alive(window, array, mouse_position, cell_width, cell_height):
     """
     # Define the cell color when alive.
     alive_cell_color = (255, 255, 0)
+
+    # If the function is called with no mouse position input, draw the state of the array.
+    if not mouse_position:
+        pygame.draw.rect(window, alive_cell_color,
+                         ((cell_x_position * cell_width) + 1,
+                          (cell_y_position * cell_height) + 1, cell_width - 1, cell_height - 1))
+        return
 
     # Get the x and y positions of the top left hand corner of the cell or cell.
     x_position = mouse_position[0] - (mouse_position[0] % cell_width)
@@ -245,7 +252,7 @@ def run_game(window, array, cell_width, cell_height):
     game_logic(window, array, cell_width, cell_height)
 
     # Sleep for 0.1 seconds to slow down the animation.
-    time.sleep(0.1)
+    time.sleep(0.01)
 
 
 def user_select_cells(window, array, cell_width, cell_height):
@@ -260,7 +267,7 @@ def user_select_cells(window, array, cell_width, cell_height):
     # Check if mouse is pressed. If the left click is pressed (0), set the state of the cell under the mouse's position
     # to alive. If the right click is pressed (2), set the state of the cell under the mouses position to dead.
     if pygame.mouse.get_pressed()[0]:
-        to_alive(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
+        to_alive(window, array, cell_width, cell_height, pygame.mouse.get_pos())
     elif pygame.mouse.get_pressed()[2]:
         to_dead(window, array, pygame.mouse.get_pos(), cell_width, cell_height)
 
@@ -290,7 +297,7 @@ def check_space(event, space_count, run):
     return run, space_count
 
 
-def user_scroll(window, event, cell_width, cell_height):
+def user_scroll(window, array, event, cell_width, cell_height):
     """Adjust the size of cells and redraw the new size if the user uses the mouse scroll.
 
     If the user scrolls in, increase the size of each cell on the display screen. If the user scrolls out, decrease the
@@ -313,6 +320,7 @@ def user_scroll(window, event, cell_width, cell_height):
             window.fill((128, 128, 128))
             # Draw new grid and update the display.
             draw_grid(window, cell_width, cell_height)
+            draw_array_state(window, array, cell_width, cell_height)
             pygame.display.update()
 
             return cell_width, cell_height
@@ -327,9 +335,29 @@ def user_scroll(window, event, cell_width, cell_height):
             window.fill((128, 128, 128))
             # Draw new grid and update the display.
             draw_grid(window, cell_width, cell_height)
+            draw_array_state(window, array, cell_width, cell_height)
             pygame.display.update()
 
             return cell_width, cell_height
 
     # If nothing has changed, return original cell width and height.
     return cell_width, cell_height
+
+
+def draw_array_state(window, array, cell_width, cell_height):
+    """Draw the current state of the array onto the display.
+
+    Loop through the current array. Where there is a True, draw a corresponding yellow block on the display to
+    represent an alive cell.
+
+    :param: window: The pygame window object that display's the game.
+    :param: array: The boolean array that stores the state of each cell.
+    :param: cell_width: The width of a single cell (cell).
+    :param: cell_height: The height of a single cell (cell).
+
+    :return: Void."""
+    for i in range(0, len(array)):
+        for j in range(0, len(array[0])):
+            if array[i][j]:
+                to_alive(window, array, cell_width, cell_height, cell_x_position=j, cell_y_position=i)
+    return
