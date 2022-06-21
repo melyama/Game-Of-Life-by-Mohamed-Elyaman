@@ -27,30 +27,48 @@ def main_game(window, cell_width, cell_height):
 
     # Main game while loop.
     while True:
-        # Loop through all events (user inputs)
-        for event in pygame.event.get():
-            # If the user presses the quit button, exit the process.
-            if event.type == pygame.QUIT:
-                sys.exit()
-
-            # Allow user to select cells to be dead or alive if and only if the game is paused.
-            if not run:
-                user_select_cells(window, array, cell_width, cell_height)
-                user_increment_generation(event, window, array, cell_width, cell_height)
-
-            # Allow the user to scroll to adjust size od the grid.
-            cell_width, cell_height = user_scroll(window, array, event, cell_width, cell_height)
-
-            # Check space count here and resume/pause game accordingly.
-            run, space_count = check_space(event, space_count, run)
+        # Check all the events and execute logic.
+        run, space_count, cell_width, cell_height = check_events(window, array,
+                                                                 cell_width, cell_height, run, space_count)
 
         # Check run variable. If true, run game logic.
         if run:
             run_game(window, array, cell_width, cell_height)
 
-
         # Update game display with new drawing.
         pygame.display.update()
+
+
+def check_events(window, array, cell_width, cell_height, run, space_count):
+    """Switch a cell state from dead to alive.
+
+    :param: window: The pygame window object that display's the game.
+    :param: array: The boolean array that stores the state of each cell.
+    :param: cell_width: The width of a single cell (cell).
+    :param: cell_height: The height of a single cell (cell).
+    :param: run: flag variable which stores whether game is in pause or run mode.
+    :param: space_count: counter variable which holds how many times the space bar key has been pressed.
+
+    :return: Void. No return, set the corresponding array value to True and color the respective cell yellow.
+    """
+    # Loop through all events (user inputs)
+    for event in pygame.event.get():
+        # If the user presses the quit button, exit the process.
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+        # Allow user to select cells to be dead or alive if and only if the game is paused.
+        if not run:
+            user_select_cells(window, array, cell_width, cell_height)
+            user_increment_generation(event, window, array, cell_width, cell_height)
+
+        # Allow the user to scroll to adjust size od the grid.
+        cell_width, cell_height = user_scroll(window, array, event, cell_width, cell_height)
+
+        # Check space count here and resume/pause game accordingly.
+        run, space_count = check_space(event, space_count, run)
+
+    return run, space_count, cell_width, cell_height
 
 
 def to_alive(window, array, cell_width, cell_height,  mouse_position=None, cell_x_position=None, cell_y_position=None):
