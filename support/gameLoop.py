@@ -339,7 +339,7 @@ def user_scroll(window, array, event, cell_width, cell_height):
             # If so, increase cell size to zoom out.
             window.fill((128, 128, 128))
             # Draw new grid and update the display.
-            draw_grid(window, cell_width, cell_height)
+            draw_grid(window, cell_width, cell_height, pygame.mouse.get_pos())
             draw_array_state(window, array, cell_width, cell_height)
             pygame.display.update()
 
@@ -354,7 +354,7 @@ def user_scroll(window, array, event, cell_width, cell_height):
             # Refill the window with the background color before drawing new grid.
             window.fill((128, 128, 128))
             # Draw new grid and update the display.
-            draw_grid(window, cell_width, cell_height)
+            draw_grid(window, cell_width, cell_height, pygame.mouse.get_pos())
             draw_array_state(window, array, cell_width, cell_height)
             pygame.display.update()
 
