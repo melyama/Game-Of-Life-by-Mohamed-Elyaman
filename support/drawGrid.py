@@ -6,7 +6,6 @@ def draw_grid(window, block_width, block_height, mouse_position=(0,0)):
 
     :param window: The window object used to display the game.
     """
-    print(mouse_position)
     # Define line color in RGB
     line_color = (180, 180, 180)
     # Grab the window dimensions.

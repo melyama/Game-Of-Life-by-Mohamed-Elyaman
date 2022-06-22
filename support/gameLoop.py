@@ -166,7 +166,7 @@ def game_logic(window, array, cell_width, cell_height):
     :param: cell_width: The width of a single cell (cell).
     :param: cell_height: The height of a single cell (cell).
 
-    :return: Void. Reverse cell values in the array object where needed.
+    :return: Void. Invert cell values in the array object where needed.
     """
     # Initialize empty array to hold the coordinates of cells whose value needs to be inverted.
     inverse_indices = []
@@ -189,10 +189,10 @@ def get_live_neighbors(array, row, col):
     A neighbor is any cell that is directly adjacent to the cell in question. Diagonals included.
     All cells have 9 neighbors.
 
-    :param: cell_width: The width of a single cell (cell).
-    :param: cell_height: The height of a single cell (cell).
+    :param: row: The row index of the cell.
+    :param: col: The column index of the cell.
 
-    :return: array: The initialized array.
+    :return: count: The number of alive neighbors the cell has.
     """
     # Initialize a count variable to count the number of alive neighbors found.
     count = 0
@@ -301,7 +301,7 @@ def check_space(event, space_count, run):
     :param: event: The event object that keeps track of user inputs.
     :param: space_count: A variable keeping track of the number of times space has been pressed.
 
-    :return: Void."""
+    :return: run flag and space count."""
     # Check if a key has been pressed. If he pressed key is space bar, check whether the occurrence is odd or even.
     # If the occurrence is odd, return True and the value of space_count. If the occurrence is odd, return False and
     # the value of space_count.
@@ -323,42 +323,42 @@ def user_scroll(window, array, event, cell_width, cell_height):
     If the user scrolls in, increase the size of each cell on the display screen. If the user scrolls out, decrease the
     size of each cell on the display screen.
 
+    :param: window: The pygame window object that display's the game.
     :param: event: The event object that keeps track of user inputs.
     :param: space_count: A variable keeping track of the number of times space has been pressed.
+    :param: array: The boolean array that stores the state of each cell.
+    :param: cell_width: The width of a single cell (cell).
+    :param: cell_height: The height of a single cell (cell).
 
-    :return: Void."""
+    :return: New cell width and cell height."""
+
+    def scroll_cell_draw(w, a, cw, ch, i):
+        """
+        Increment the cell width and height and redraw a new grid with the new dimensions.
+        """
+        # Increase cell width and height by 2 pixels.
+        cw += i
+        ch += i
+        # Refill the window with the background color before drawing new grid.
+        # If so, increase cell size to zoom out.
+        w.fill((128, 128, 128))
+        # Draw new grid and update the display.
+        draw_grid(w, cw, ch, pygame.mouse.get_pos())
+        draw_array_state(window, a, cell_width, cell_height)
+
+        return cw, ch
+
     # Check if the current event involved a mouse button.
     if event.type == pygame.MOUSEBUTTONDOWN:
         # Check if the event that occurred is a mouse scroll in. If so, increase cell size to zoom in.
         if event.button == 4:
-            # Increase cell width and height by 2 pixels.
-            cell_width += 2
-            cell_height += 2
-
-            # Refill the window with the background color before drawing new grid.
-            # If so, increase cell size to zoom out.
-            window.fill((128, 128, 128))
-            # Draw new grid and update the display.
-            draw_grid(window, cell_width, cell_height, pygame.mouse.get_pos())
-            draw_array_state(window, array, cell_width, cell_height)
-            pygame.display.update()
-
-            return cell_width, cell_height
+            increment = 2
+            return scroll_cell_draw(window, array, cell_width, cell_height, increment)
 
         # Check if the event that occurred is a mouse scroll out.
         elif event.button == 5:
-            # Reduce cell width and height by 2 pixels.
-            cell_width -= 2
-            cell_height -= 2
-
-            # Refill the window with the background color before drawing new grid.
-            window.fill((128, 128, 128))
-            # Draw new grid and update the display.
-            draw_grid(window, cell_width, cell_height, pygame.mouse.get_pos())
-            draw_array_state(window, array, cell_width, cell_height)
-            pygame.display.update()
-
-            return cell_width, cell_height
+            increment = -2
+            return scroll_cell_draw(window, array, cell_width, cell_height, increment)
 
     # If nothing has changed, return original cell width and height.
     return cell_width, cell_height
