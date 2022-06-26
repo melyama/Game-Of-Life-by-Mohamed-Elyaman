@@ -1,7 +1,6 @@
 """Main game file. See support folder for supporting files."""
 
 import pygame
-from support.drawGrid import draw_grid
 from support.gameLoop import main_game
 
 
@@ -42,11 +41,7 @@ def main():
     cell_width = 15
     cell_height = 15
 
-    # Fill the scree with a grey background color
-    window.fill((128, 128, 128))
 
-    # Draw the grey background and grid.
-    draw_grid(window, cell_width, cell_height)
 
     # Run main game logic.
     main_game(window, cell_width, cell_height)

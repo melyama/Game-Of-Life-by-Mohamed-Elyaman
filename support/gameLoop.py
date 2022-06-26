@@ -4,6 +4,7 @@ import pygame
 import sys
 import time
 from .drawGrid import draw_grid
+from .default_draw_grid import default_draw_grid
 
 
 def main_game(window, cell_width, cell_height):
@@ -18,6 +19,15 @@ def main_game(window, cell_width, cell_height):
     # Initialize a 2D array with False to represent initial state of all cells
     array = array_init(cell_width, cell_height)
 
+    # Fill the scree with a grey background color
+    window.fill((128, 128, 128))
+
+    # Initialize a 2D array that will hold the x and y positions of the grid on the display.
+    x_grid_position_array = []
+    x_grid_position_array = []
+
+    x_grid_position_array, y_grid_position_array = default_draw_grid(window, cell_width, cell_height)
+
     # Initialize a run variable to run game logic when user presses space.
     run = False
 
@@ -28,8 +38,8 @@ def main_game(window, cell_width, cell_height):
     # Main game while loop.
     while True:
         # Check all the events and execute logic.
-        run, space_count, cell_width, cell_height = check_events(window, array,
-                                                                 cell_width, cell_height, run, space_count)
+        run, space_count, cell_width, cell_height, x_grid_position_array, y_grid_position_array = check_events(window, array,
+                                                                 cell_width, cell_height, run, space_count, x_grid_position_array, y_grid_position_array)
 
         # Check run variable. If true, run game logic.
         if run:
@@ -39,7 +49,7 @@ def main_game(window, cell_width, cell_height):
         pygame.display.update()
 
 
-def check_events(window, array, cell_width, cell_height, run, space_count):
+def check_events(window, array, cell_width, cell_height, run, space_count, x_grid_position_array, y_grid_position_array):
     """Check all game events (user inputs) and handle them as needed.
 
     :param: window: The pygame window object that display's the game.
@@ -63,12 +73,12 @@ def check_events(window, array, cell_width, cell_height, run, space_count):
             user_increment_generation(event, window, array, cell_width, cell_height)
 
         # Allow the user to scroll to adjust size od the grid.
-        cell_width, cell_height = user_scroll(window, array, event, cell_width, cell_height)
+        cell_width, cell_height, x_grid_position_array, y_grid_position_array = user_scroll(window, array, event, cell_width, cell_height, x_grid_position_array, y_grid_position_array)
 
         # Check space count here and resume/pause game accordingly.
         run, space_count = check_space(event, space_count, run)
 
-    return run, space_count, cell_width, cell_height
+    return run, space_count, cell_width, cell_height, x_grid_position_array, y_grid_position_array
 
 
 def to_alive(window, array, cell_width, cell_height,  mouse_position=None, cell_x_position=None, cell_y_position=None):
@@ -317,7 +327,7 @@ def check_space(event, space_count, run):
     return run, space_count
 
 
-def user_scroll(window, array, event, cell_width, cell_height):
+def user_scroll(window, array, event, cell_width, cell_height, x_grid_position_array, y_grid_position_array):
     """Adjust the size of cells and redraw the new size if the user uses the mouse scroll.
 
     If the user scrolls in, increase the size of each cell on the display screen. If the user scrolls out, decrease the
@@ -336,17 +346,14 @@ def user_scroll(window, array, event, cell_width, cell_height):
         """
         Increment the cell width and height and redraw a new grid with the new dimensions.
         """
-        # Increase cell width and height by 2 pixels.
-        cw += i
-        ch += i
         # Refill the window with the background color before drawing new grid.
         # If so, increase cell size to zoom out.
         w.fill((128, 128, 128))
         # Draw new grid and update the display.
-        draw_grid(w, cw, ch, pygame.mouse.get_pos())
+        cw, ch, x,y = draw_grid(w, cw, ch, pygame.mouse.get_pos(), x_grid_position_array, y_grid_position_array, increment)
         draw_array_state(window, a, cell_width, cell_height)
 
-        return cw, ch
+        return cw, ch, x, y
 
     # Check if the current event involved a mouse button.
     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -361,7 +368,7 @@ def user_scroll(window, array, event, cell_width, cell_height):
             return scroll_cell_draw(window, array, cell_width, cell_height, increment)
 
     # If nothing has changed, return original cell width and height.
-    return cell_width, cell_height
+    return cell_width, cell_height, x_grid_position_array, y_grid_position_array
 
 
 def draw_array_state(window, array, cell_width, cell_height):
