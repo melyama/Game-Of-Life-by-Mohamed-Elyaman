@@ -23,9 +23,6 @@ def main_game(window, cell_width, cell_height):
     window.fill((128, 128, 128))
 
     # Initialize a 2D array that will hold the x and y positions of the grid on the display.
-    x_grid_position_array = []
-    x_grid_position_array = []
-
     x_grid_position_array, y_grid_position_array = default_draw_grid(window, cell_width, cell_height)
 
     # Initialize a run variable to run game logic when user presses space.
@@ -350,7 +347,7 @@ def user_scroll(window, array, event, cell_width, cell_height, x_grid_position_a
         # If so, increase cell size to zoom out.
         w.fill((128, 128, 128))
         # Draw new grid and update the display.
-        cw, ch, x,y = draw_grid(w, cw, ch, pygame.mouse.get_pos(), x_grid_position_array, y_grid_position_array, increment)
+        cw, ch, x, y = draw_grid(w, cw, ch, pygame.mouse.get_pos(), x_grid_position_array, y_grid_position_array, increment)
         draw_array_state(window, a, cell_width, cell_height)
 
         return cw, ch, x, y

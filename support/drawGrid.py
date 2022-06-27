@@ -37,7 +37,7 @@ def draw_grid(window, block_width, block_height, mouse_position, x_grid_position
     for y in y_grid_position_array:
 
         if abs(y - mouse_position[1]) < delta_y:
-            delta_y = abs(y - mouse_position[0])
+            delta_y = abs(y - mouse_position[1])
             minimum_y_index = counter
 
         counter += 1
