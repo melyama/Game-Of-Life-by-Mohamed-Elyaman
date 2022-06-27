@@ -48,9 +48,9 @@ def draw_grid(window, block_width, block_height, mouse_position, x_grid_position
         x_start = x_grid_position_array[minimum_x_index] - int(increment/2)
 
     if y_grid_position_array[minimum_y_index] > mouse_position[1]:
-        y_start = y_grid_position_array[minimum_y_index] - int(increment/2)
-    else:
         y_start = y_grid_position_array[minimum_y_index] + int(increment/2)
+    else:
+        y_start = y_grid_position_array[minimum_y_index] - int(increment/2)
 
     # Draw vertical lines beginning at the origin and ending at the height of the window
     for x_position in range(x_start, display_width, cw):

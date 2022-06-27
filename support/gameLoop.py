@@ -359,11 +359,16 @@ def user_scroll(window, array, event, cell_width, cell_height, x_grid_position_a
     if event.type == pygame.MOUSEBUTTONDOWN:
         # Check if the event that occurred is a mouse scroll in. If so, increase cell size to zoom in.
         if event.button == 4:
+            w, h = pygame.display.get_surface().get_size()
+            if (cell_width >= w/3) or (cell_height >= h/3):
+                return cell_width, cell_height, x_grid_position_array, y_grid_position_array
             increment = 2
             return scroll_cell_draw(window, array, cell_width, cell_height, increment)
 
         # Check if the event that occurred is a mouse scroll out.
         elif event.button == 5:
+            if (cell_width <= 4) or (cell_height <= 4):
+                return cell_width, cell_height, x_grid_position_array, y_grid_position_array
             increment = -2
             return scroll_cell_draw(window, array, cell_width, cell_height, increment)
 
